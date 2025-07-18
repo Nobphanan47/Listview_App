@@ -36,6 +36,45 @@ class HomePage extends StatelessWidget {
         title: const Text('My Listview App'),
         backgroundColor: Colors.deepPurple,
       ),
+      // ✅ เพิ่ม Drawer
+      drawer: Drawer(
+        child: ListView(
+          padding: EdgeInsets.zero,
+          children: [
+            const DrawerHeader(
+              decoration: BoxDecoration(color: Colors.deepPurple),
+              child: Text(
+                'เมนูหลัก',
+                style: TextStyle(color: Colors.white, fontSize: 20),
+              ),
+            ),
+            ListTile(
+              title: const Text('📸 รูปภาพทั้งหมด'),
+              onTap: () {
+                Navigator.pop(context); // ปิด Drawer ก่อน
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => AllImagesPage(images: images),
+                  ),
+                );
+              },
+            ),
+            ListTile(
+              title: const Text('📝 รายการทั้งหมด'),
+              onTap: () {
+                Navigator.pop(context); // ปิด Drawer ก่อน
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const AllListPage(),
+                  ),
+                );
+              },
+            ),
+          ],
+        ),
+      ),
       body: Column(
         children: [
           // 📸 GridView ครึ่งบน
@@ -145,7 +184,7 @@ class HomePage extends StatelessWidget {
                 Expanded(
                   child: ListView.builder(
                     padding: const EdgeInsets.symmetric(horizontal: 10),
-                    itemCount: 3, // แสดงแค่ 3 รายการแรก
+                    itemCount: 3,
                     itemBuilder: (context, index) {
                       return Card(
                         elevation: 2,
@@ -184,25 +223,48 @@ class AllImagesPage extends StatelessWidget {
         title: const Text('📸 รูปภาพทั้งหมด'),
         backgroundColor: Colors.deepPurple,
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(10),
-        child: GridView.builder(
-          itemCount: images.length,
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 3,
-            crossAxisSpacing: 10,
-            mainAxisSpacing: 10,
-          ),
-          itemBuilder: (context, index) {
-            return ClipRRect(
-              borderRadius: BorderRadius.circular(10),
-              child: Image.asset(
-                images[index],
-                fit: BoxFit.cover,
+      body: Column(
+        children: [
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.all(10),
+              child: GridView.builder(
+                itemCount: images.length,
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 3,
+                  crossAxisSpacing: 10,
+                  mainAxisSpacing: 10,
+                ),
+                itemBuilder: (context, index) {
+                  return ClipRRect(
+                    borderRadius: BorderRadius.circular(10),
+                    child: Image.asset(
+                      images[index],
+                      fit: BoxFit.cover,
+                    ),
+                  );
+                },
               ),
-            );
-          },
-        ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(20),
+            child: Center(
+              child: ElevatedButton.icon(
+                onPressed: () => Navigator.pop(context),
+                icon: const Icon(Icons.arrow_back, color: Colors.black),
+                label: const Text(
+                  "กลับ",
+                  style: TextStyle(color: Colors.black),
+                ),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.deepPurple,
+                  padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 12),
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -219,23 +281,46 @@ class AllListPage extends StatelessWidget {
         title: const Text('📝 รายการทั้งหมด'),
         backgroundColor: Colors.deepPurple,
       ),
-      body: ListView.builder(
-        padding: const EdgeInsets.all(10),
-        itemCount: 10,
-        itemBuilder: (context, index) {
-          return Card(
-            elevation: 2,
-            margin: const EdgeInsets.symmetric(vertical: 4),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10),
+      body: Column(
+        children: [
+          Expanded(
+            child: ListView.builder(
+              padding: const EdgeInsets.all(10),
+              itemCount: 10,
+              itemBuilder: (context, index) {
+                return Card(
+                  elevation: 2,
+                  margin: const EdgeInsets.symmetric(vertical: 4),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: ListTile(
+                    title: Text("รายการที่ ${index + 1}"),
+                    subtitle: const Text("รายละเอียดเพิ่มเติม..."),
+                    trailing: const Icon(Icons.arrow_forward_ios, size: 16),
+                  ),
+                );
+              },
             ),
-            child: ListTile(
-              title: Text("รายการที่ ${index + 1}"),
-              subtitle: const Text("รายละเอียดเพิ่มเติม..."),
-              trailing: const Icon(Icons.arrow_forward_ios, size: 16),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(20),
+            child: Center(
+              child: ElevatedButton.icon(
+                onPressed: () => Navigator.pop(context),
+                icon: const Icon(Icons.arrow_back, color: Colors.black),
+                label: const Text(
+                  "กลับ",
+                  style: TextStyle(color: Colors.black),
+                ),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.deepPurple,
+                  padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 12),
+                ),
+              ),
             ),
-          );
-        },
+          ),
+        ],
       ),
     );
   }
